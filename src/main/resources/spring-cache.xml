@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                           http://www.springframework.org/schema/cache
+                           http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+    <cache:annotation-driven cache-manager="cacheManager"/>
+
+    <bean id="userServiceBean" class="com.xunmall.example.redis.spring.UserServiceBean"/>
+
+    <!-- 使用简单对象存储 -->
+    <!--  <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+          <property name="caches">
+              <set>
+                  <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="default"></bean>
+                  <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="users"></bean>
+              </set>
+          </property>
+      </bean>-->
+
+    <!--使用ehcache存储-->
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcache"></property>
+    </bean>
+    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+    </bean>
+
+    <!--使用Guava配置 只要添加maven依赖以及配置cacheManager-->
+    <!--<bean id="cacheManager" class="org.springframework.cache.guava.GuavaCacheManager" />-->
+
+
+</beans>
